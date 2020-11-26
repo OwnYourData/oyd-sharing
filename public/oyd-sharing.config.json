@@ -1,0 +1,28 @@
+{
+  "serviceTypes": {
+    "info": {
+      "key": "SharingInfo",
+      "properties": {
+        "description": "description",
+        "schemaDri": "survey"
+      }
+    },
+    "data": {
+      "key": "SharingPool"
+    },
+    "usagePolicy": {
+      "key": "UsagePolicy"
+    }
+  },
+  "dataObject": {
+    "additionalProps": {
+      "did": "did",
+      "controllerUsagePolicy": "controller_usage_policy",
+      "isUsagePolicyMatching": "is_usage_policy_matching"
+    }
+  },
+  "endpoints": {
+    "share": "/api/share_data",
+    "usagePolicyMatch": "https://governance.ownyourdata.eu/api/usage-policy/match"
+  }
+}
