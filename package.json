@@ -1,6 +1,6 @@
 {
   "name": "oyd-sharing",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -14,7 +14,7 @@
     "core-js": "^3.6.5",
     "did-resolver": "^2.1.1",
     "oca.js-vue": "0.0.39",
-    "vaultifier": "^0.3.1",
+    "vaultifier": "^0.4.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
