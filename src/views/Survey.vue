@@ -6,6 +6,7 @@
         mode="out-in"
       >
         <b-form
+          class="form"
           v-if="!!ocaForm"
           @submit.prevent="next"
         >
@@ -127,8 +128,8 @@ export default Vue.extend({
 })
 </script>
 
-<style>
-.controlItem {
+<style scoped>
+.form >>> .controlItem {
   background-color: transparent;
 }
 </style>
