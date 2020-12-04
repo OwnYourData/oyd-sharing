@@ -15,38 +15,48 @@
           @submit.prevent="next"
           @reset.prevent="back"
         >
-          <p>Select all items you want to share:</p>
-          <b-form-group>
-            <b-badge variant="success">{{selectedDataItems.length}} selected</b-badge>
-            <div
-              v-if="!dataItems"
-              class="list-container d-flex justify-content-center align-items-center"
-            >
-              <b-spinner />
-            </div>
-            <b-list-group
-              v-else
-              class="list-container"
-            >
-              <b-list-group-item
-                v-for="item of dataItems"
-                :key="item.id"
-                :active="isSelected(item)"
-                @click="() => toggleSelectedItem(item)"
+          <b-alert
+            v-if="dataItems && dataItems.length === 0"
+            show
+            variant="warning"
+          >
+            We could not find any data of type "{{title}}" in your data vault.<br>
+            However, you can still continue participating in this data sharing.
+          </b-alert>
+          <template v-else>
+            <p>Select all items you want to share:</p>
+            <b-form-group>
+              <b-badge variant="success">{{selectedDataItems.length}} selected</b-badge>
+              <div
+                v-if="!dataItems"
+                class="list-container d-flex justify-content-center align-items-center"
               >
-                <b-form-checkbox
-                  @change="toggleSelectedItem(item)"
-                  :checked="isSelected(item)"
-                > {{getDateTimeString(item)}}</b-form-checkbox>
-              </b-list-group-item>
-            </b-list-group>
-            <b-pagination
-              :total-rows="totalDataItems"
-              v-model="currentDataItemsPage"
-              @page-click="(evt, page) => fetchDataItems(page)"
-              align="fill"
-            ></b-pagination>
-          </b-form-group>
+                <b-spinner />
+              </div>
+              <b-list-group
+                v-else
+                class="list-container"
+              >
+                <b-list-group-item
+                  v-for="item of dataItems"
+                  :key="item.id"
+                  :active="isSelected(item)"
+                  @click="() => toggleSelectedItem(item)"
+                >
+                  <b-form-checkbox
+                    @change="toggleSelectedItem(item)"
+                    :checked="isSelected(item)"
+                  > {{getDateTimeString(item)}}</b-form-checkbox>
+                </b-list-group-item>
+              </b-list-group>
+              <b-pagination
+                :total-rows="totalDataItems"
+                v-model="currentDataItemsPage"
+                @page-click="(evt, page) => fetchDataItems(page)"
+                align="fill"
+              ></b-pagination>
+            </b-form-group>
+          </template>
 
           <b-button type="reset">Back</b-button>
           &nbsp;

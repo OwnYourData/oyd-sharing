@@ -125,7 +125,7 @@ export default Vue.extend({
         }).then(res => res.json());
 
         this.isUsagePolicyMatching = usagePolicyMatch.code === 0
-        
+
         this.$store.commit(MutationType.SET_CONTROLLER_USAGE_POLICY, controllerUsagePolicy);
         this.$store.commit(MutationType.SET_IS_USAGE_POLICY_MATCHING, this.isUsagePolicyMatching);
       }
@@ -160,8 +160,6 @@ export default Vue.extend({
       return !!(this.schemaDri && this.did);
     },
     isError(): boolean {
-      // return !(this.sharingInfo);
-      // TODO:
       return !(this.sharingInfo && this.isUsagePolicyMatching !== undefined)
     },
     did(): string | undefined {
