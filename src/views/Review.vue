@@ -110,8 +110,8 @@ export default Vue.extend({
 
       try {
         await shareData({
-          schemaDri: this.schemaDri,
-          content: this.survey,
+          survey: this.survey,
+          surveySchemaDri: this.schemaDri,
           dataSeries: this.dataSeries,
         });
 

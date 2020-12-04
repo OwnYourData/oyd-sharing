@@ -1,30 +1,59 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { DataSeries } from '@/store';
 import { MimeType } from 'vaultifier';
 import { ConfigService } from './config';
 import { getInstance } from './vaultifier';
 
-interface TimeSeries {
-  schema_dri: string;
-  content: any[];
+interface ShareObject {
+  survey: Survey;
+  series: TimeSeries[];
 }
 
-export const shareData = async (survey: {
-  schemaDri: string;
+interface Survey {
+  id: number;
+  schema_dri: string;
   content: any;
+}
+
+interface TimeSeries {
+  schema_dri: string;
+  series: SeriesItem[];
+}
+
+interface SeriesItem {
+  id: number;
+  content: any;
+}
+
+interface ShareDataParams {
+  survey: any;
+  surveySchemaDri: string;
   dataSeries: DataSeries[];
-}) => {
+}
+
+export const shareData = async ({
+  survey,
+  surveySchemaDri,
+  dataSeries,
+}: ShareDataParams) => {
   const item = await getInstance().postItem({
-    schemaDri: survey.schemaDri,
+    schemaDri: surveySchemaDri,
     mimeType: MimeType.JSON,
-    content: survey.content,
+    content: survey,
   });
 
-  const postObj = {
-    'survey_id': item.id,
-    'time_series': survey.dataSeries.map<TimeSeries>(x => ({
-      // eslint-disable-next-line @typescript-eslint/camelcase
+  const postObj: ShareObject = {
+    survey: {
+      id: item.id,
+      schema_dri: surveySchemaDri,
+      content: survey,
+    },
+    series: dataSeries.map<TimeSeries>(x => ({
       schema_dri: x.schemaDri,
-      content: x.dataItems.map(x => x.content),
+      series: x.dataItems.map(y => ({
+        id: y.id,
+        content: y.content,
+      })),
     })),
   };
 
