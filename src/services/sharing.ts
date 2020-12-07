@@ -13,6 +13,7 @@ interface Survey {
   id: number;
   schema_dri: string;
   content: any;
+  survey_meta?: any;
 }
 
 interface TimeSeries {
@@ -27,12 +28,14 @@ interface SeriesItem {
 
 interface ShareDataParams {
   survey: any;
+  surveyMeta?: any;
   surveySchemaDri: string;
   dataSeries: DataSeries[];
 }
 
 export const shareData = async ({
   survey,
+  surveyMeta,
   surveySchemaDri,
   dataSeries,
 }: ShareDataParams) => {
@@ -56,6 +59,9 @@ export const shareData = async ({
       })),
     })),
   };
+
+  if (surveyMeta)
+    postObj.survey.survey_meta = surveyMeta;
 
   await getInstance().post(ConfigService.get('endpoints', 'share'), true, postObj);
 }

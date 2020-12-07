@@ -63,6 +63,9 @@ export default Vue.extend({
     survey() {
       return (this.$store.state as State).survey;
     },
+    surveyMeta() {
+      return (this.$store.state as State).surveyMeta;
+    },
     dataSeries() {
       return (this.$store.state as State).dataSeries;
     },
@@ -111,6 +114,7 @@ export default Vue.extend({
       try {
         await shareData({
           survey: this.survey,
+          surveyMeta: this.surveyMeta,
           surveySchemaDri: this.schemaDri,
           dataSeries: this.dataSeries,
         });

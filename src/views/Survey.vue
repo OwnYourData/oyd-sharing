@@ -10,6 +10,7 @@
           v-if="!!ocaForm"
           @submit.prevent="next"
         >
+          <!-- TODO: Integrate language selector here -> like in our DataBud -->
           <form-builder-gui :form="ocaForm"></form-builder-gui>
           <b-button
             type="submit"
@@ -34,15 +35,19 @@ import { DATA_SERIES } from '../router';
 import { ConfigService } from '../services/config';
 import { MutationType } from '@/constants/mutation-type';
 import { DataSeries, State } from '@/store';
+import { Store } from 'vuex';
 
 interface Data {
   ocaForm?: any;
 }
 
-const fillAdditionalProp = (obj: any, propKey: string, value: any) => {
-  const prop = ConfigService.get('dataObject', 'additionalProps', propKey);
-  if (prop)
-    obj[prop] = value;
+const addSurveyMeta = (store: Store<any>, propKey: string, value: any) => {
+  const prop = ConfigService.get('dataObject', 'surveyMeta', propKey);
+  if (prop) {
+    store.commit(MutationType.SET_SURVEY_META_ITEM, {
+      [prop]: value,
+    });
+  }
 }
 
 export default Vue.extend({
@@ -114,9 +119,10 @@ export default Vue.extend({
       } = this.$store.state as State;
       const survey = getObjectFromForm(this.ocaForm);
 
-      fillAdditionalProp(survey, 'did', this.did);
-      fillAdditionalProp(survey, 'controllerUsagePolicy', controllerUsagePolicy);
-      fillAdditionalProp(survey, 'isUsagePolicyMatching', isUsagePolicyMatching);
+      const store = this.$store;
+      addSurveyMeta(store, 'did', this.did);
+      addSurveyMeta(store, 'controllerUsagePolicy', controllerUsagePolicy);
+      addSurveyMeta(store, 'isUsagePolicyMatching', isUsagePolicyMatching);
 
       this.$store.commit(MutationType.SET_SURVEY, survey);
 

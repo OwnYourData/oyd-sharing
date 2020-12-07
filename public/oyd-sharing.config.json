@@ -15,7 +15,7 @@
     }
   },
   "dataObject": {
-    "additionalProps": {
+    "surveyMeta": {
       "did": "did",
       "controllerUsagePolicy": "controller_usage_policy",
       "isUsagePolicyMatching": "is_usage_policy_matching"

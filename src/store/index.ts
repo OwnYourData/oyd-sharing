@@ -11,6 +11,7 @@ export interface State {
   dataUrl?: string;
   schemaDri?: string;
   survey?: any;
+  surveyMeta?: any;
   controllerUsagePolicy?: string;
   isUsagePolicyMatching: boolean;
   dataSeries: DataSeries[];
@@ -26,6 +27,7 @@ const getDefaultState = (): State => ({
   dataUrl: undefined,
   schemaDri: undefined,
   survey: undefined,
+  surveyMeta: undefined,
   controllerUsagePolicy: undefined,
   isUsagePolicyMatching: false,
   dataSeries: [],
@@ -45,6 +47,13 @@ export default new Vuex.Store<State>({
     },
     [MutationType.SET_SURVEY]: (state, payload?: any) => {
       state.survey = payload;
+    },
+    [MutationType.SET_SURVEY_META_ITEM]: (state, payload: any) => {
+      state.surveyMeta = state.surveyMeta ?? {};
+      state.surveyMeta = {
+        ...state.surveyMeta,
+        ...payload,
+      };
     },
     [MutationType.SET_DATA_URL]: (state, payload?: string) => {
       state.dataUrl = payload;
