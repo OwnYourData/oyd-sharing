@@ -5,13 +5,16 @@
         name="fade"
         mode="out-in"
       >
+        <b-spinner v-if="isWorking" />
         <b-form
+          v-else
           class="form"
-          v-if="!!ocaForm"
           @submit.prevent="next"
         >
-          <!-- TODO: Integrate language selector here -> like in our DataBud -->
-          <form-builder-gui :form="ocaForm"></form-builder-gui>
+          <oca-view
+            :schemaDri="schemaDri"
+            ref="ocaView"
+          ></oca-view>
           <b-button
             type="submit"
             variant="primary"
@@ -19,7 +22,6 @@
             Continue
           </b-button>
         </b-form>
-        <b-spinner v-else />
       </transition>
     </b-jumbotron>
   </b-container>
@@ -28,18 +30,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { FormBuilderGui } from 'oca.js-vue';
+import OcaView from '../components/OCAView.vue';
 import { SchemaService } from '../services/schema';
-import { getObjectFromForm, renderForm } from '../utils/oca';
 import { DATA_SERIES } from '../router';
 import { ConfigService } from '../services/config';
 import { MutationType } from '@/constants/mutation-type';
 import { DataSeries, State } from '@/store';
 import { Store } from 'vuex';
-
-interface Data {
-  ocaForm?: any;
-}
 
 const addSurveyMeta = (store: Store<any>, propKey: string, value: any) => {
   const prop = ConfigService.get('dataObject', 'surveyMeta', propKey);
@@ -50,13 +47,17 @@ const addSurveyMeta = (store: Store<any>, propKey: string, value: any) => {
   }
 }
 
+interface Data {
+  isWorking: boolean;
+}
+
 export default Vue.extend({
-  data: (): Data => ({
-    ocaForm: undefined,
-  }),
   components: {
-    FormBuilderGui,
+    OcaView,
   },
+  data: (): Data => ({
+    isWorking: true,
+  }),
   async created() {
     if (!this.schemaDri)
       return;
@@ -65,8 +66,6 @@ export default Vue.extend({
 
     if (!overlays)
       return;
-
-    this.ocaForm = renderForm(overlays);
 
     const base = overlays.find(x => x.type.indexOf('schema_base') !== -1);
     if (!base)
@@ -99,6 +98,8 @@ export default Vue.extend({
         }
       } catch { /* There can be exceptions while parsing the URL */ }
     }
+
+    this.isWorking = false;
   },
   computed: {
     schemaDri(): string | undefined {
@@ -110,14 +111,11 @@ export default Vue.extend({
   },
   methods: {
     async next() {
-      if (!this.ocaForm)
-        return;
-
       const {
         controllerUsagePolicy,
         isUsagePolicyMatching,
       } = this.$store.state as State;
-      const survey = getObjectFromForm(this.ocaForm);
+      const survey = (this.$refs.ocaView as any).getDataObject();
 
       const store = this.$store;
       addSurveyMeta(store, 'did', this.did);
