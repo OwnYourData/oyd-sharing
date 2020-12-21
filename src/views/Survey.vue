@@ -68,35 +68,40 @@ export default Vue.extend({
       return;
 
     const base = overlays.find(x => x.type.indexOf('schema_base') !== -1);
-    if (!base)
-      return;
+    const entries = overlays.find(x =>
+      x['@context'] === 'https://odca.tech/overlays/v1' &&
+      x.type.indexOf('entry') !== -1
+    );
 
-    const attrs = base.attributes;
-    for (const attr in attrs) {
-      let value = attrs[attr];
+    if (base && entries) {
+      const attrs = base.attributes;
+      for (const attr in attrs) {
+        let value = attrs[attr];
 
-      // TODO: just for testing
-      if (value === 'DRI')
-        // vital signs
-        value = ['dri:ckkxqw93XFSTVH5aGgyxFC5GFojcwZAr6Ca17vnEg6zr']
-      // TODO: just for testing
+        if (value === 'DRI')
+          value = entries.attr_entries[attr];
 
-      // data series attributes always have to be an array
-      if (!Array.isArray(value) || value.length === 0)
-        continue;
+        // data series attributes always have to be an array
+        if (!Array.isArray(value) || value.length === 0)
+          continue;
 
-      try {
-        // first entry is schema dri
-        const uri = new URL(value[0]);
-
-        if (uri.protocol === 'dri:') {
-          const payload: DataSeries = {
-            schemaDri: uri.pathname,
-            dataItems: [],
-          };
-          this.$store.commit(MutationType.SET_DATA_SERIES_ENTRY, payload);
-        }
-      } catch { /* There can be exceptions while parsing the URL */ }
+        try {
+          // first entry is schema BASE dri
+          const uri = new URL(value[0]);
+          // protocol is always lowercase when parsed by class "URI"
+          if (uri.protocol === 'dri:') {
+            // as the dri provided is only a schema base dri, we've to ask the repository which schema dris exist
+            // because our data vault only knows about schema dris rather than schema base dris
+            (await SchemaService.getOverlaySchemaDRIsFromSchemaBase(uri.pathname)).forEach((schemaDri) => {
+              const payload: DataSeries = {
+                schemaDri,
+                dataItems: [],
+              };
+              this.$store.commit(MutationType.SET_DATA_SERIES_ENTRY, payload);
+            });
+          }
+        } catch { /* There can be exceptions while parsing the URL */ }
+      }
     }
 
     this.isWorking = false;
