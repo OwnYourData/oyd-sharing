@@ -14,9 +14,17 @@
       mode="out-in"
     >
       <keep-alive>
+        <b-container v-if="isWorking">
+          <b-jumbotron>
+            <b-spinner />
+          </b-jumbotron>
+        </b-container>
         <!-- this key ensures components are not reused, if they specify the same component but have different paths -->
         <!-- this is important for our DataSeries component -->
-        <router-view :key="$router.history.current.path" />
+        <router-view
+          v-else
+          :key="$router.history.current.path"
+        />
       </keep-alive>
     </transition>
   </div>
@@ -29,7 +37,14 @@ import * as VaultifierService from './services/vaultifier';
 import { PACKAGE } from './services/config';
 import { State } from './store';
 
+interface Data {
+  isWorking: boolean;
+}
+
 export default Vue.extend({
+  data: (): Data => ({
+    isWorking: true,
+  }),
   async created() {
     // On app start, always go to our HOME page
     if (this.$router.currentRoute.name !== HOME)
@@ -48,6 +63,7 @@ export default Vue.extend({
     });
 
     await VaultifierService.initialize();
+    this.isWorking = false;
   },
   computed: {
     version() {
