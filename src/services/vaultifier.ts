@@ -3,8 +3,14 @@ import { Vaultifier, VaultifierWeb } from 'vaultifier';
 let vaultifier: Vaultifier;
 
 export const initialize = async () => {
-  vaultifier = await VaultifierWeb.create();
-  await vaultifier.initialize();
-  await vaultifier.setEnd2EndEncryption(true);
+  const vault = await VaultifierWeb.create({
+    clientId: 'dev.unterholzer.ownyourdata.sharing',
+  });
+
+  if (!vault)
+    return;
+
+  await vault.initialize();
+  await vault.setEnd2EndEncryption(true);
 };
 export const getInstance = () => vaultifier;
