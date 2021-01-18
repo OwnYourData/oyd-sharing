@@ -14,7 +14,7 @@
     "core-js": "^3.6.5",
     "did-resolver": "^2.1.1",
     "oca.js-vue": "0.0.40",
-    "vaultifier": "^2.0.2",
+    "vaultifier": "^2.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
