@@ -12,5 +12,7 @@ export const initialize = async () => {
 
   await vault.initialize();
   await vault.setEnd2EndEncryption(true);
+
+  return vaultifier = vault;
 };
 export const getInstance = () => vaultifier;
