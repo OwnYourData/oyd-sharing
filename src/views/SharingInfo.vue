@@ -139,7 +139,10 @@ export default Vue.extend({
       if (!(this.schemaDri && this.did))
         return;
 
-      this.$store.commit(MutationType.SET_SCHEMA_DRI, this.schemaDri);
+      // TODO:
+      const schemaDri = '8unrKdijiW6gEq3FEXC6unK4xuqmpxMmikPLRteSi5uS';
+
+      this.$store.commit(MutationType.SET_SCHEMA_DRI, schemaDri);
       this.$router.push({
         name: SURVEY,
       })

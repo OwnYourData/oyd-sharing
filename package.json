@@ -13,7 +13,7 @@
     "bootstrap-vue": "^2.19.0",
     "core-js": "^3.6.5",
     "did-resolver": "^2.1.1",
-    "oca.js-vue": "0.0.40",
+    "oca.js-vue": "^0.2.2",
     "vaultifier": "^2.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

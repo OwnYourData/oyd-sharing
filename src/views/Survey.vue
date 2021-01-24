@@ -1,18 +1,26 @@
 <template>
   <b-container>
     <b-jumbotron>
-      <transition
+      <transition-group
         name="fade"
         mode="out-in"
       >
-        <b-spinner v-if="isWorking" />
+        <p
+          v-show="isWorking"
+          key="spinner"
+        >
+          Preparing survey
+          <b-spinner />
+        </p>
         <b-form
-          v-else
+          v-show="!isWorking"
           class="form"
           @submit.prevent="next"
+          key="survey"
         >
           <oca-view
             :schemaDri="schemaDri"
+            @ready="isWorking = false"
             ref="ocaView"
           ></oca-view>
           <b-button
@@ -22,7 +30,7 @@
             Continue
           </b-button>
         </b-form>
-      </transition>
+      </transition-group>
     </b-jumbotron>
   </b-container>
 </template>
@@ -103,8 +111,6 @@ export default Vue.extend({
         } catch { /* There can be exceptions while parsing the URL */ }
       }
     }
-
-    this.isWorking = false;
   },
   computed: {
     schemaDri(): string | undefined {
