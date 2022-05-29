@@ -14,8 +14,10 @@
     "core-js": "^3.6.5",
     "did-resolver": "^2.1.1",
     "oca.js-vue": "^0.2.2",
-    "vaultifier": "^2.1.0",
-    "vue": "^2.6.11",
+    "oydid-did-resolver": "^0.2.0",
+    "soya-js": "^0.5.2",
+    "vaultifier": "^2.10.0",
+    "vue": "^2.6.14",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
     "web-did-resolver": "^1.3.5"
@@ -35,7 +37,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
     "typescript": "~3.9.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.14"
   },
   "license": "MIT"
 }

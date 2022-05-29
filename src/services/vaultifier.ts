@@ -6,12 +6,14 @@ export const initialize = async () => {
   const vault = await VaultifierWeb.create({
     clientId: 'dev.unterholzer.ownyourdata.sharing',
   });
+  await vault.initialize()
 
-  if (!vault)
+  if (!vault.vaultifier)
     return;
 
-  await vault.setEnd2EndEncryption(true);
+  vaultifier = vault.vaultifier;
+  await vaultifier.setEnd2EndEncryption(true);
 
-  return vaultifier = vault;
+  return vaultifier;
 };
 export const getInstance = () => vaultifier;
